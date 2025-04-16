@@ -1,11 +1,18 @@
 package com.playtomic.tests.wallet.model.dto;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class PaymentDTO {
+public class WalletDTO {
 
-    private String credit_card;
+    private UUID id;
+
+    private String email;
+
+    private String name;
+
     private BigDecimal amount;
+
 }

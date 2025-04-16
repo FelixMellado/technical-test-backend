@@ -13,7 +13,6 @@ public interface StripeService {
 
     public void refund(@NonNull String paymentId);
 
-    List<Payment> getAllPayments();
-    public Optional<Payment> getPaymentById(UUID id);
+    public List<Payment> findPaymentsById(UUID emailId);
 
 }

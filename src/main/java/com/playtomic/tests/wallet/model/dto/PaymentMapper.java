@@ -7,8 +7,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface PaymentMapper {
 
-//    PaymentMapper INSTANCE = Mappers.getMapper(PaymentMapper.class);
-//
-//    PaymentDTO paymentToPaymentDTO(Payment payment);
-//    Payment paymentDTOToPayment(PaymentDTO paymentDTO);
+    PaymentMapper INSTANCE = Mappers.getMapper(PaymentMapper.class);
+    PaymentDto paymentToPaymentDTO(Payment payment);
+    Payment paymentDtoToPayment(PaymentDto paymentDTO);
 }

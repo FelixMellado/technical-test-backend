@@ -3,9 +3,11 @@ package com.playtomic.tests.wallet.service.impl;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.playtomic.tests.wallet.exceptions.StripeRestTemplateResponseErrorHandler;
 import com.playtomic.tests.wallet.exceptions.StripeServiceException;
+import com.playtomic.tests.wallet.exceptions.WalletNotRegisterException;
 import com.playtomic.tests.wallet.model.Payment;
 import com.playtomic.tests.wallet.repository.PaymentRepository;
 import com.playtomic.tests.wallet.service.StripeService;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -57,15 +59,6 @@ public class StripeServiceImpl implements StripeService {
                 .build();
     }
 
-    public Optional<Payment> getPaymentById(@NonNull UUID paymentId){
-
-        return paymentRepository.findById(paymentId);
-    }
-
-    public List<Payment> getAllPayments(){
-
-        return paymentRepository.findAll();
-    }
 
     /**
      * Charges money in the credit card.
@@ -79,14 +72,7 @@ public class StripeServiceImpl implements StripeService {
      */
     public Payment charge(@NonNull String creditCardNumber, @NonNull BigDecimal amount) throws StripeServiceException {
         ChargeRequest body = new ChargeRequest(creditCardNumber, amount);
-        return Optional.ofNullable(restTemplate.postForObject(chargesUri, body, Payment.class))
-                .map(p -> {
-                    p.setAmount(amount);
-                    p.setCreditCard(creditCardNumber);
-                    paymentRepository.save(p);
-                    return p;
-                })
-                .orElse(null);
+        return restTemplate.postForObject(chargesUri, body, Payment.class);
 
     }
 
@@ -96,6 +82,10 @@ public class StripeServiceImpl implements StripeService {
     public void refund(@NonNull String paymentId) throws StripeServiceException {
         // Object.class because we don't read the body here.
         restTemplate.postForEntity(chargesUri.toString(), null, Object.class, paymentId);
+    }
+
+    public List<Payment> findPaymentsById(UUID emailId){
+        return paymentRepository.findAllById(Collections.singleton(emailId));
     }
 
     @AllArgsConstructor

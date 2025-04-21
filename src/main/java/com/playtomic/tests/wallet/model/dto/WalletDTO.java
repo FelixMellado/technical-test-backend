@@ -9,6 +9,8 @@ public class WalletDTO {
 
     private UUID id;
 
+    private UUID emailId;
+
     private String email;
 
     private String name;

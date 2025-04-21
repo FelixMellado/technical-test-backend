@@ -21,4 +21,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(ex.getMessage());
     }
+
+    @ExceptionHandler(PaymentAmountNegativeException.class)
+    public ResponseEntity<String> handlePaymentNegative(PaymentAmountNegativeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
 }

@@ -3,20 +3,13 @@ package com.playtomic.tests.wallet.service.impl;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.playtomic.tests.wallet.exceptions.StripeRestTemplateResponseErrorHandler;
 import com.playtomic.tests.wallet.exceptions.StripeServiceException;
-import com.playtomic.tests.wallet.exceptions.WalletNotRegisterException;
 import com.playtomic.tests.wallet.model.Payment;
 import com.playtomic.tests.wallet.repository.PaymentRepository;
 import com.playtomic.tests.wallet.service.StripeService;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -41,8 +34,6 @@ public class StripeServiceImpl implements StripeService {
     @NonNull
     private URI refundsUri;
 
-    private PaymentRepository paymentRepository;
-
     @NonNull
     private RestTemplate restTemplate;
 
@@ -52,7 +43,6 @@ public class StripeServiceImpl implements StripeService {
                              @NonNull RestTemplateBuilder restTemplateBuilder) {
         this.chargesUri = chargesUri;
         this.refundsUri = refundsUri;
-        this.paymentRepository = paymentRepository;
         this.restTemplate =
                 restTemplateBuilder
                 .errorHandler(new StripeRestTemplateResponseErrorHandler())
@@ -82,10 +72,6 @@ public class StripeServiceImpl implements StripeService {
     public void refund(@NonNull String paymentId) throws StripeServiceException {
         // Object.class because we don't read the body here.
         restTemplate.postForEntity(chargesUri.toString(), null, Object.class, paymentId);
-    }
-
-    public List<Payment> findPaymentsById(UUID emailId){
-        return paymentRepository.findAllById(Collections.singleton(emailId));
     }
 
     @AllArgsConstructor

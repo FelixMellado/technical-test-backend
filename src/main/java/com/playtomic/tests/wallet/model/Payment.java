@@ -18,7 +18,6 @@ public class Payment {
     @Id
     private UUID id;
 
-    @NonNull
     private UUID emailId;
 
     @NonNull

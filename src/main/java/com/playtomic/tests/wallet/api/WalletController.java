@@ -8,11 +8,12 @@ import com.playtomic.tests.wallet.model.dto.WalletDTO;
 import com.playtomic.tests.wallet.model.dto.WalletMapper;
 import com.playtomic.tests.wallet.service.StripeService;
 import com.playtomic.tests.wallet.service.WalletService;
-import java.util.List;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,12 +54,12 @@ public class WalletController {
         return ResponseEntity.ok(PaymentMapper.INSTANCE.paymentToPaymentDTO(payment));
     }
 
-    @GetMapping("wallet/{id}/allPayments")
-    public ResponseEntity<List<Payment>> getAllPaymentsById(Wallet wallet){
+    @GetMapping("wallet/{id}")
+    public ResponseEntity<Wallet> getWallet(@PathVariable UUID id){
 
-        List<Payment> paymentList = stripeService.findPaymentsById(wallet.getEmailId());
+        Wallet wallet = walletService.getWallet(id);
 
-        return ResponseEntity.ok(paymentList);
+        return ResponseEntity.ok(wallet);
 
     }
 

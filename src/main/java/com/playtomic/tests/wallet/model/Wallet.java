@@ -19,8 +19,7 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(unique = true) // better Hash
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true)
     private UUID emailId;
 
     @Column(unique = true)

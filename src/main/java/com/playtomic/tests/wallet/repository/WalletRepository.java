@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WalletRepository extends JpaRepository<Wallet, UUID> {
 
+    Optional<Wallet> findByEmailId(UUID emailId);
 }

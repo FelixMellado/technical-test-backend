@@ -29,7 +29,12 @@ public class WalletServiceImpl implements WalletService {
         this.stripeService = stripeService;
     }
 
-
+    /**
+     * Create Wallet
+     *
+     * @param wallet
+     *
+     */
     public Wallet createWallet(Wallet wallet) {
 
         if (walletRepository.findByEmailId(wallet.getEmailId()).isPresent()) {
@@ -40,6 +45,14 @@ public class WalletServiceImpl implements WalletService {
         return walletRepository.save(wallet);
     }
 
+    /**
+     * TopUp Wallet
+     *
+     *  Fill wallet, save payment and save wallet with new amount
+     *
+     * @param payment
+     *
+     */
     public Payment topUp(Payment payment) {
 
         validatePayment(payment);
@@ -60,6 +73,14 @@ public class WalletServiceImpl implements WalletService {
         return chargedPayment;
     }
 
+    /**
+     * Create Wallet
+     *
+     *  Retrieve wallet by emailId
+     *
+     * @param id
+     *
+     */
     public Wallet getWallet(@NonNull UUID id){
 
         return walletRepository.findByEmailId(id)

@@ -1,10 +1,10 @@
 package com.playtomic.tests.wallet.service.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.playtomic.tests.wallet.exceptions.StripeAmountTooSmallException;
 import com.playtomic.tests.wallet.exceptions.StripeRestTemplateResponseErrorHandler;
 import com.playtomic.tests.wallet.exceptions.StripeServiceException;
 import com.playtomic.tests.wallet.model.Payment;
-import com.playtomic.tests.wallet.repository.PaymentRepository;
 import com.playtomic.tests.wallet.service.StripeService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -39,7 +39,6 @@ public class StripeServiceImpl implements StripeService {
 
     public StripeServiceImpl(@Value("${stripe.simulator.charges-uri}") @NonNull URI chargesUri,
                              @Value("${stripe.simulator.refunds-uri}") @NonNull URI refundsUri,
-                             PaymentRepository paymentRepository,
                              @NonNull RestTemplateBuilder restTemplateBuilder) {
         this.chargesUri = chargesUri;
         this.refundsUri = refundsUri;
@@ -61,6 +60,8 @@ public class StripeServiceImpl implements StripeService {
      * @throws StripeServiceException
      */
     public Payment charge(@NonNull String creditCardNumber, @NonNull BigDecimal amount) throws StripeServiceException {
+        if (amount.compareTo(new BigDecimal(6)) < 0)
+            throw new StripeAmountTooSmallException();
         ChargeRequest body = new ChargeRequest(creditCardNumber, amount);
         return restTemplate.postForObject(chargesUri, body, Payment.class);
 
